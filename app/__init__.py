@@ -33,7 +33,7 @@ def create_app(config_class=Config):
     @login_manager.user_loader
     def load_user(user_id):
         from app.models import User
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
 
     # Register custom CLI commands
     @app.cli.command("init-db")
