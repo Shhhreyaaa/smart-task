@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-super-secret-default-key-replace-me}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///tasks.db}
+    volumes:
+      - data_volume:/app/instance
+      - logs_volume:/app/logs
+    restart: unless-stopped
+
+volumes:
+  data_volume:
+  logs_volume:

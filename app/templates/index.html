@@ -1,42 +1,269 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTasks | Work Smarter. Achieve More.</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom Landing CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    
+    <!-- Spline 3D Viewer Script (Lazy loaded) -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.32/build/spline-viewer.js" defer></script>
+</head>
+<body>
+    
+    <!-- Top App Name Header (Since Navbar was removed) -->
+    <div class="container pt-4 position-absolute top-0 start-0 w-100" style="z-index: 1000;">
+        <a class="d-flex align-items-center gap-2 text-decoration-none" href="{{ url_for('core.index') }}">
+            <i class="bi bi-layers-fill fs-3" style="color: var(--brand-primary);"></i>
+            <span class="fw-bold text-dark fs-4" style="letter-spacing: -0.5px;">SmartTasks</span>
+        </a>
+    </div>
 
-{% block content %}
-<div class="p-5 mb-4 bg-white rounded-3 border shadow-sm">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold text-primary mb-3">
-            <i class="bi bi-rocket-takeoff-fill"></i> Smart Task Manager
-        </h1>
-        <p class="col-md-8 fs-4 text-muted">
-            The project foundation and development skeleton have been successfully configured!
-        </p>
-        <hr class="my-4">
-        <div class="row g-4 mb-4">
-            <div class="col-md-6">
-                <div class="d-flex align-items-start gap-3">
-                    <div class="p-2 bg-success bg-opacity-10 text-success rounded">
-                        <i class="bi bi-shield-check fs-3"></i>
+    <!-- Animated Background Aurora -->
+    <div class="aurora-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100 pb-5">
+                <!-- Left Content: 55% approx -->
+                <div class="col-lg-6 col-md-12 pt-5 mt-5" data-aos="fade-up" data-aos-duration="1000">
+                    <div class="hero-badges d-flex gap-2 mb-4">
+                        <span class="badge"><i class="bi bi-lightning-charge-fill me-1"></i> Fast</span>
+                        <span class="badge"><i class="bi bi-shield-lock-fill me-1"></i> Secure</span>
+                        <span class="badge"><i class="bi bi-phone-fill me-1"></i> Responsive</span>
                     </div>
-                    <div>
-                        <h5 class="fw-bold">Security Guards Active</h5>
-                        <p class="text-muted small">CSRF Protection (Flask-WTF) and environment-bound Secret Keys are active.</p>
+                    
+                    <h1 class="display-3 fw-bold mb-3" style="line-height: 1.1;">
+                        Work Smarter.<br>
+                        Stay Organized.<br>
+                        <span class="gradient-text">Achieve More.</span>
+                    </h1>
+                    
+                    <p class="lead text-secondary mb-5 pe-lg-5 fw-normal" style="font-size: 1.2rem; line-height: 1.6;">
+                        A modern productivity platform built with Python and Flask featuring analytics, smart task management, beautiful dashboards, and enterprise-grade architecture.
+                    </p>
+                    
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-premium btn-lg">Start for free <i class="bi bi-arrow-right ms-2"></i></a>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="d-flex align-items-start gap-3">
-                    <div class="p-2 bg-info bg-opacity-10 text-info rounded">
-                        <i class="bi bi-database-check fs-3"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold">Database & Models Ready</h5>
-                        <p class="text-muted small">SQLAlchemy is bound and ready to map tables inside <code>instance/</code>.</p>
+                
+                <!-- Right Content: Interactive Teacher Bot 45% approx -->
+                <div class="col-lg-6 col-md-12 mt-5 mt-lg-0 text-center" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
+                    <div class="position-relative d-inline-block float-subtle interactive-bot-container" style="cursor: pointer; transition: transform 0.2s;">
+                        
+                        <!-- Speech Bubble -->
+                        <div class="bot-speech-bubble glass-panel position-absolute p-3 rounded-4 shadow-lg text-start" style="top: -30px; right: -20px; max-width: 220px; z-index: 10;">
+                            <span id="botMessage" class="fw-bold" style="color: var(--brand-primary); font-size: 0.95rem;">Hey there! Time to complete your tasks! 📚</span>
+                            <!-- Speech bubble pointer -->
+                            <div class="position-absolute" style="bottom: -10px; left: 30px; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid rgba(255,255,255,0.8);"></div>
+                        </div>
+                        
+                        <!-- Bot Image -->
+                        <img src="{{ url_for('static', filename='img/teacher_bot.png') }}" alt="Teacher Bot" class="img-fluid rounded-5 shadow-lg border border-white border-4" style="max-height: 450px; object-fit: cover;">
                     </div>
                 </div>
             </div>
         </div>
-        <p class="text-muted small mb-0">
-            Current Phase: <strong>Phase 1 (Skeleton Setup)</strong>. Business logic and models are deferred to future stages.
-        </p>
-    </div>
-</div>
-{% endblock %}
+    </section>
+
+    <!-- Dashboard Showcase Mockup -->
+    <section id="dashboard" class="py-5 relative">
+        <div class="container dashboard-mockup" data-aos="fade-up" data-aos-duration="1000" data-aos-offset="200">
+            <div class="browser-frame">
+                <div class="browser-dots">
+                    <div class="browser-dot dot-red"></div>
+                    <div class="browser-dot dot-yellow"></div>
+                    <div class="browser-dot dot-green"></div>
+                </div>
+                <!-- Since we don't have an actual screenshot asset yet, we use a structured placeholder that looks like the dashboard -->
+                <div class="bg-light p-4 rounded-3 border" style="min-height: 500px;">
+                    <div class="row mb-4">
+                        <div class="col-md-3"><div class="bg-white p-4 rounded shadow-sm h-100 border-start border-primary border-4"><h6 class="text-muted">Total Tasks</h6><h2 class="mb-0">42</h2></div></div>
+                        <div class="col-md-3"><div class="bg-white p-4 rounded shadow-sm h-100 border-start border-warning border-4"><h6 class="text-muted">Pending</h6><h2 class="mb-0">15</h2></div></div>
+                        <div class="col-md-3"><div class="bg-white p-4 rounded shadow-sm h-100 border-start border-success border-4"><h6 class="text-muted">Completed</h6><h2 class="mb-0">27</h2></div></div>
+                        <div class="col-md-3"><div class="bg-white p-4 rounded shadow-sm h-100 border-start border-danger border-4"><h6 class="text-muted">Overdue</h6><h2 class="mb-0">3</h2></div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="bg-white p-4 rounded shadow-sm h-100">
+                                <h5 class="mb-4">Recent Tasks</h5>
+                                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                                    <div><h6 class="mb-1">Finish API Integration</h6><small class="text-muted"><span class="badge bg-danger bg-opacity-10 text-danger">High Priority</span></small></div>
+                                    <span class="badge bg-warning text-dark">In Progress</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                                    <div><h6 class="mb-1">Update User Profile UI</h6><small class="text-muted"><span class="badge bg-primary bg-opacity-10 text-primary">Medium Priority</span></small></div>
+                                    <span class="badge bg-secondary">Pending</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-white p-4 rounded shadow-sm h-100">
+                                <h5 class="mb-4">Task Status</h5>
+                                <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+                                    <div class="rounded-circle border border-5 border-primary" style="width: 150px; height: 150px; border-top-color: #198754 !important; border-right-color: #ffc107 !important;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="display-5 fw-bold mb-3">Everything you need to succeed</h2>
+                <p class="lead text-secondary mx-auto" style="max-width: 600px;">
+                    Enterprise-grade tools disguised as a beautiful, intuitive platform.
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="glass-panel feature-card">
+                        <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                        <h4 class="mb-3">Analytics</h4>
+                        <p class="text-secondary mb-0">Visualize your productivity with interactive Chart.js dashboards and real-time metrics.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="glass-panel feature-card">
+                        <div class="feature-icon"><i class="bi bi-calendar3"></i></div>
+                        <h4 class="mb-3">Calendar View</h4>
+                        <p class="text-secondary mb-0">Manage deadlines effortlessly with a full drag-and-drop interactive calendar integration.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="glass-panel feature-card">
+                        <div class="feature-icon"><i class="bi bi-tags-fill"></i></div>
+                        <h4 class="mb-3">Smart Tags</h4>
+                        <p class="text-secondary mb-0">Organize complex projects using flexible many-to-many tag relationships and deep filtering.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="glass-panel feature-card">
+                        <div class="feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                        <h4 class="mb-3">Productivity</h4>
+                        <p class="text-secondary mb-0">Perform bulk actions, export to CSV/JSON, and track estimated time vs actual completion.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="glass-panel feature-card">
+                        <div class="feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                        <h4 class="mb-3">Security</h4>
+                        <p class="text-secondary mb-0">Bank-level security with global CSRF protection, CSP headers, and HTTP-only session cookies.</p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="glass-panel feature-card">
+                        <div class="feature-icon"><i class="bi bi-activity"></i></div>
+                        <h4 class="mb-3">Insights</h4>
+                        <p class="text-secondary mb-0">Never miss a beat with a comprehensive global activity log tracking every system action.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="py-5 my-5 text-center" data-aos="zoom-in" data-aos-duration="800">
+        <div class="container">
+            <div class="glass-panel p-5 d-inline-block mx-auto" style="max-width: 800px; width: 100%;">
+                <h2 class="fw-bold mb-4">Ready to transform your workflow?</h2>
+                <p class="lead text-secondary mb-4">Join today and experience the future of task management.</p>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-premium btn-lg px-5 py-3">Create Free Account</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-4 text-muted border-top border-secondary border-opacity-10" style="backdrop-filter: blur(10px);">
+        <div class="container">
+            <small>&copy; 2026 SmartTasks Project. Designed with <i class="bi bi-heart-fill text-danger"></i> & Python.</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap & AOS Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize Animate On Scroll
+        AOS.init({
+            once: true, // whether animation should happen only once - while scrolling down
+            offset: 50, // offset (in px) from the original trigger point
+        });
+
+        // Add shadow to sticky navbar on scroll
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('.navbar-glass');
+            if (nav) {
+                if (window.scrollY > 50) {
+                    nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+                    nav.style.background = 'rgba(255, 255, 255, 0.85)';
+                } else {
+                    nav.style.boxShadow = 'none';
+                    nav.style.background = 'rgba(248, 250, 252, 0.7)';
+                }
+            }
+        });
+        // Interactive Bot Logic
+        const botMessages = [
+            "Hey there! Time to complete your tasks! 📚",
+            "A productive day keeps the stress away! 🚀",
+            "Click me again! I'm your SmartTasks bot! 🤖",
+            "Let's crush those goals today! 🎯",
+            "Time to organize your workflow! ✨"
+        ];
+        
+        const botContainer = document.querySelector('.interactive-bot-container');
+        const botMessage = document.getElementById('botMessage');
+        
+        if(botContainer && botMessage) {
+            botMessage.style.transition = "opacity 0.2s ease";
+            
+            // Interaction on click
+            botContainer.addEventListener('click', () => {
+                const randomMsg = botMessages[Math.floor(Math.random() * botMessages.length)];
+                botMessage.style.opacity = 0;
+                
+                // Add a small bounce effect to the bot
+                botContainer.style.transform = "scale(0.95)";
+                setTimeout(() => { botContainer.style.transform = "scale(1)"; }, 150);
+                
+                setTimeout(() => {
+                    botMessage.innerText = randomMsg;
+                    botMessage.style.opacity = 1;
+                }, 200);
+            });
+        }
+    </script>
+</body>
+</html>

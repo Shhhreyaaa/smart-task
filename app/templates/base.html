@@ -21,7 +21,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.index') }}">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('core.index') }}">
                 <i class="bi bi-check2-square text-primary fs-3"></i>
                 <span class="fw-bold">SmartTasks</span>
             </a>
@@ -34,26 +34,43 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}">Dashboard</a>
+                            <a class="nav-link {% if request.endpoint == 'core.dashboard' %}active{% endif %}" href="{{ url_for('core.dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'tasks.list_tasks' %}active{% endif %}" href="{{ url_for('tasks.list_tasks') }}">My Tasks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Profile</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'main.index' %}active{% endif %}" href="{{ url_for('main.index') }}">Home</a>
+                            <a class="nav-link {% if request.endpoint == 'core.index' %}active{% endif %}" href="{{ url_for('core.index') }}">Home</a>
                         </li>
                     {% endif %}
                 </ul>
                 <div class="d-flex align-items-center gap-3">
                     {% if current_user.is_authenticated %}
-                        <span class="text-white-50 small">Hello, <strong>{{ current_user.username }}</strong></span>
-                        <form action="{{ url_for('main.logout') }}" method="POST" class="d-inline">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <button type="submit" class="btn btn-outline-light btn-sm d-flex align-items-center gap-1">
-                                <i class="bi bi-box-arrow-right"></i> Logout
-                            </button>
-                        </form>
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white d-flex align-items-center gap-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-weight: bold;">
+                                    {{ current_user.username[0]|upper }}
+                                </div>
+                                <span>{{ current_user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                                <li>
+                                    <form action="{{ url_for('auth.logout') }}" method="POST" class="w-100 m-0">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button type="submit" class="dropdown-item text-danger d-flex align-items-center gap-2">
+                                            <i class="bi bi-box-arrow-right"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     {% else %}
-                        <a href="{{ url_for('main.login') }}" class="btn btn-outline-light btn-sm">Sign In</a>
-                        <a href="{{ url_for('main.register') }}" class="btn btn-primary btn-sm ms-2">Sign Up</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm ms-2">Register</a>
                     {% endif %}
                 </div>
             </div>
@@ -61,7 +78,7 @@
     </nav>
 
     <!-- Main Content Area -->
-    <main class="container py-5 flex-grow-1">
+    <main class="{% block container_class %}container{% endblock %} py-5 flex-grow-1">
         <!-- Flash messages container -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}

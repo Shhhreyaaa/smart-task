@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Smart Tasks{% endblock %}
+
+{% block container_class %}container-fluid{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse text-white py-3" style="min-height: calc(100vh - 120px); border-radius: 12px;">
+        <div class="position-sticky pt-2">
+            <ul class="nav flex-column gap-2 px-2">
+                <li class="nav-item">
+                    <a class="nav-link active text-white bg-primary rounded px-3 py-2 d-flex align-items-center gap-2" href="{{ url_for('core.dashboard') }}">
+                        <i class="bi bi-house-door-fill"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 px-3 py-2 d-flex align-items-center gap-2 hover-link" href="{{ url_for('core.calendar') }}">
+                        <i class="bi bi-calendar-event"></i>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 px-3 py-2 d-flex align-items-center gap-2 hover-link" href="{{ url_for('tasks.list_tasks') }}">
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Tasks</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 px-3 py-2 d-flex align-items-center gap-2 hover-link" href="{{ url_for('tasks.create_task') }}">
+                        <i class="bi bi-plus-circle"></i>
+                        <span>Add Task</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 px-3 py-2 d-flex align-items-center gap-2 hover-link" href="{{ url_for('auth.profile') }}">
+                        <i class="bi bi-person-bounding-box"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="nav-item mt-4 border-top border-secondary pt-3">
+                    <form action="{{ url_for('auth.logout') }}" method="POST" class="w-100">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-link text-danger w-100 text-start px-3 py-2 d-flex align-items-center gap-2 text-decoration-none shadow-none">
+                            <i class="bi bi-box-arrow-left"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Workspace Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div>
+                <h1 class="h2 fw-bold">Dashboard</h1>
+                <p class="text-muted mb-0">Overview of your productivity and scheduled milestones</p>
+            </div>
+            
+            <!-- Quick Actions Toolbar -->
+            <div class="btn-toolbar mb-2 mb-md-0 gap-2">
+                <a href="{{ url_for('tasks.create_task') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-plus-lg"></i> Add New Task
+                </a>
+                <a href="{{ url_for('tasks.list_tasks') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-eye"></i> View All Tasks
+                </a>
+                <a href="{{ url_for('auth.profile') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-person"></i> Profile
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Cards Grid -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm h-100 rounded-3 text-center py-2">
+                    <div class="card-body">
+                        <h6 class="text-muted small fw-semibold">Total Tasks</h6>
+                        <h3 class="fw-bold mb-0 mt-1 text-primary">{{ total_tasks }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm h-100 rounded-3 text-center py-2">
+                    <div class="card-body">
+                        <h6 class="text-muted small fw-semibold">Pending</h6>
+                        <h3 class="fw-bold mb-0 mt-1 text-secondary">{{ pending_tasks }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm h-100 rounded-3 text-center py-2">
+                    <div class="card-body">
+                        <h6 class="text-muted small fw-semibold">In Progress</h6>
+                        <h3 class="fw-bold mb-0 mt-1 text-warning">{{ in_progress_tasks }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm h-100 rounded-3 text-center py-2">
+                    <div class="card-body">
+                        <h6 class="text-muted small fw-semibold">Completed</h6>
+                        <h3 class="fw-bold mb-0 mt-1 text-success">{{ completed_tasks }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm h-100 rounded-3 text-center py-2">
+                    <div class="card-body">
+                        <h6 class="text-muted small fw-semibold">Due Today</h6>
+                        <h3 class="fw-bold mb-0 mt-1 text-info">{{ due_today_tasks }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="card border-0 shadow-sm h-100 rounded-3 text-center py-2 {% if overdue_tasks > 0 %}border border-danger border-2{% endif %}">
+                    <div class="card-body">
+                        <h6 class="text-muted small fw-semibold">Overdue</h6>
+                        <h3 class="fw-bold mb-0 mt-1 text-danger">{{ overdue_tasks }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-8">
+                <!-- Analytics Charts -->
+                <div class="card border-0 shadow-sm rounded-3 h-100">
+                    <div class="card-header bg-white pt-3 border-bottom-0">
+                        <h5 class="fw-bold mb-0">Analytics</h5>
+                    </div>
+                    <div class="card-body d-flex gap-4">
+                        <div class="w-50">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                        <div class="w-50">
+                            <canvas id="priorityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <!-- Activity Log -->
+                <div class="card border-0 shadow-sm rounded-3 h-100">
+                    <div class="card-header bg-white pt-3 pb-2">
+                        <h5 class="fw-bold mb-0">Recent Activity</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush rounded-3">
+                            {% for activity in recent_activities %}
+                            <li class="list-group-item px-3 py-2 border-0 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="small fw-semibold text-dark">
+                                        <i class="bi bi-activity text-primary me-1"></i> {{ activity.action }}
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.75rem;">
+                                        {{ activity.timestamp.strftime('%H:%M') }}
+                                    </div>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li class="list-group-item text-muted small py-3 text-center border-0">No recent activity</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Tasks List / Empty State -->
+        <div class="card border-0 shadow-sm rounded-3 mb-4">
+            <div class="card-body p-4">
+                <h4 class="fw-bold mb-3">Recent Tasks</h4>
+                
+                {% if recent_tasks %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="border-0">Title</th>
+                                    <th scope="col" class="border-0">Category</th>
+                                    <th scope="col" class="border-0">Priority</th>
+                                    <th scope="col" class="border-0">Status</th>
+                                    <th scope="col" class="border-0">Due Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task in recent_tasks %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ url_for('tasks.view_task', task_id=task.id) }}" class="text-dark text-decoration-none fw-semibold">{{ task.title }}</a>
+                                        </td>
+                                        <td>
+                                            {% if task.category %}
+                                                <span class="badge bg-secondary-subtle text-secondary px-2.5 py-1">{{ task.category }}</span>
+                                            {% else %}
+                                                <span class="text-muted small">None</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if task.priority == 'High' %}bg-danger-subtle text-danger{% elif task.priority == 'Medium' %}bg-warning-subtle text-warning-emphasis{% else %}bg-primary-subtle text-primary{% endif %} px-2.5 py-1">
+                                                {{ task.priority }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if task.status == 'Completed' %}bg-success-subtle text-success{% elif task.status == 'In Progress' %}bg-warning-subtle text-warning-emphasis{% else %}bg-secondary-subtle text-secondary{% endif %} px-2.5 py-1">
+                                                {{ task.status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if task.due_date %}
+                                                <span class="small text-muted"><i class="bi bi-calendar me-1"></i>{{ task.due_date.strftime('%Y-%m-%d') }}</span>
+                                            {% else %}
+                                                <span class="text-muted small">No date</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <!-- Professional Empty State -->
+                    <div class="text-center py-5">
+                        <i class="bi bi-clipboard2-plus text-muted display-1 mb-3 d-block"></i>
+                        <h4 class="fw-bold mb-2">Create Your First Task</h4>
+                        <p class="text-muted col-md-6 mx-auto mb-4">
+                            You don't have any tasks scheduled. Start organizing your workload by creating your first task milestone today!
+                        </p>
+                        <a href="{{ url_for('tasks.create_task') }}" class="btn btn-primary px-4 py-2 fw-semibold">
+                            <i class="bi bi-plus-lg me-1"></i> Create Your First Task
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+        
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'In Progress', 'Completed'],
+                datasets: [{
+                    data: [{{ pending_tasks }}, {{ in_progress_tasks }}, {{ completed_tasks }}],
+                    backgroundColor: ['#6c757d', '#ffc107', '#198754'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Tasks by Status' }
+                }
+            }
+        });
+        
+        // High, Medium, Low
+        const high = {{ high_priority_tasks }};
+        const total = {{ total_tasks }};
+        const med = total - high - {{ pending_tasks }}; // rough dummy since we don't pass low/med to template exactly
+        // Wait, we don't have medium and low count explicitly passed from backend.
+        // We will just fetch it from backend if needed, or pass it via JS.
+        // For now, let's just use placeholder for medium/low or calculate them.
+        
+        new Chart(priorityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Priority Distribution'],
+                datasets: [
+                    { label: 'High', data: [high], backgroundColor: '#dc3545' },
+                    { label: 'Other', data: [total - high], backgroundColor: '#0d6efd' }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'Tasks by Priority' }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

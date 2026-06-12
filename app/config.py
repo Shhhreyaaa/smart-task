@@ -12,3 +12,9 @@ class Config:
         'sqlite:///tasks.db'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # Security Settings
+    SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'False').lower() == 'true'
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    PERMANENT_SESSION_LIFETIME = 86400  # 1 day

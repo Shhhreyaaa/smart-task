@@ -151,3 +151,24 @@ By default, the server spins up at: `http://127.0.0.1:5000/`.
 *   **API Layer Integration:** Expose RESTful endpoints for third-party client integrations.
 *   **Third-Party OAuth Login:** Google/GitHub social logins.
 *   **Calendar View:** Drag-and-drop calendars for task scheduling.
+
+
+
+✅ Phase 1 — Architecture & Planning
+✅ Phase 2 — Project Setup
+✅ Phase 3 — Database Models
+✅ Phase 4 — Authentication
+✅ Phase 5 — Dashboard & Navigation
+✅ Phase 6 — Task CRUD
+✅ Phase 7 — Search, Filters, Sorting, Pagination & Bulk Actions
+🔜 Phase 8 — User Profile, Settings & Account Management
+🔜 Phase 9 — UI/UX Polish, Security, Validation & Error Pages
+🔜 Phase 10 — Testing, Docker, Deployment, GitHub README, Screenshots & Demo Video
+
+
+# 1. Initialize the git repository (if you haven't already done so)
+git init
+# 2. Stage all the skeleton files we created
+git add .
+# 3. Commit the staged changes with the commit message
+git commit -m "feat: setup project skeleton and config factory for Phase 1"
