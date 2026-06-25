@@ -32,31 +32,31 @@ The application adopts the **Application Factory Pattern** paired with modular P
 project/
 │
 ├── app/
-│   ├── __init__.py      # Flask application factory (create_app)
-│   ├── models.py        # Database models (User, Task, Category placeholders)
-│   ├── routes.py        # Blueprints and controller views
-│   ├── forms.py         # WTForms validation forms
-│   ├── extensions.py    # Flask extensions definitions (decoupled)
-│   ├── config.py        # Configurations for different environments (Dev, Test, Prod)
-│   ├── services/        # Subdirectory for isolated business logic scripts
-│   ├── templates/       # Jinja2 HTML layouts
-│   │   ├── base.html    # Master container layout
-│   │   └── index.html   # Main dashboard landing wrapper
-│   └── static/          # Public CSS and JS assets
+│   ├── __init__.py     
+│   ├── models.py       
+│   ├── routes.py       
+│   ├── forms.py         
+│   ├── extensions.py   
+│   ├── config.py       
+│   ├── services/        
+│   ├── templates/    
+│   │   ├── base.html   
+│   │   └── index.html  
+│   └── static/          
 │       ├── css/
 │       │   └── style.css
 │       └── js/
 │           └── app.js
 │
-├── instance/            # Subfolder for local SQLite database files
-├── migrations/          # Managed database migrations history (Flask-Migrate)
-├── tests/               # Test suites (pytest)
+├── instance/            
+├── migrations/          
+├── tests/              
 │
-├── requirements.txt     # Locked project dependencies
-├── run.py               # Main bootstrap entry script
-├── .gitignore           # File exclusion mapping for Git version control
-├── README.md            # Project overview and setup guides
-└── .env.example         # Template file for secret keys and local configs
+├── requirements.txt    
+├── run.py              
+├── .gitignore           
+├── README.md            
+└── .env.example         
 
 
 ## Features (Planned)
@@ -117,26 +117,26 @@ project/
         
 
 4.  **Install Required Dependencies:**
-    ```bash
+   bash
     pip install -r requirements.txt
-    ```
+    
 
 5.  **Set Up Local Configurations:**
     Copy the `.env.example` template into a local `.env` file and customize your variables:
     *   **Windows (PowerShell):**
-        ```powershell
+        powershell
         Copy-Item .env.example .env
-        ```
+        
     *   **macOS / Linux:**
-        ```bash
+        bash
         cp .env.example .env
-        ```
+        
 
 ## How to Run Locally
 Once configurations are set, trigger the server:
-```bash
+bash
 python run.py
-```
+
 ## Future Enhancements
 *   **API Layer Integration:** Expose RESTful endpoints for third-party client integrations.
 *   **Third-Party OAuth Login:** Google/GitHub social logins.
